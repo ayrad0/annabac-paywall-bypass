@@ -1,0 +1,25 @@
+// ==UserScript==
+// @name           Annalbac Layout Fix
+// @namespace     http://tampermonkey.net/
+// @version       2023-12-10
+// @description   Removes distracting elements and enables page scroll
+// @author        You
+// @match         https://www.annabac.com/*
+// @icon          data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALSAAAAABAAEAAAICTAEAOw==
+// @grant          none
+// ==/UserScript==
+
+(function() {
+  'use strict';
+
+  // Remove the specified elements
+  const masqueFlou = document.querySelector('.masque-flou');
+  masqueFlou && masqueFlou.parentNode.removeChild(masqueFlou);
+
+  const popinWrapper = document.querySelector('.popin-wrapper.popin-contenus-gratuits');
+  popinWrapper && popinWrapper.parentNode.removeChild(popinWrapper);
+
+ // Enable page scrolling
+  document.documentElement.style.overflow = 'auto';
+  document.body.style.overflow = 'auto';
+})();
