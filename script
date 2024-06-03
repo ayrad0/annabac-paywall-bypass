@@ -1,25 +1,39 @@
 // ==UserScript==
-// @name           Annalbac Layout Fix
-// @namespace     http://tampermonkey.net/
-// @version       2023-12-10
-// @description   Removes distracting elements and enables page scroll
-// @author        You
-// @match         https://www.annabac.com/*
-// @icon          data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALSAAAAABAAEAAAICTAEAOw==
-// @grant          none
+// @name         Annabac to Smry.ai
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Redirect Annabac to Smry.ai and copy content
+// @author       Your Name
+// @match        https://www.annabac.com/revision-bac/*
+// @grant        GM_openInTab
+// @grant        GM_setClipboard
+// @run-at       document-end
 // ==/UserScript==
 
 (function() {
-  'use strict';
+    'use strict';
 
-  // Remove the specified elements
-  const masqueFlou = document.querySelector('.masque-flou');
-  masqueFlou && masqueFlou.parentNode.removeChild(masqueFlou);
+    // Check if we are on the correct Annabac page
+    if (window.location.href.includes("https://www.annabac.com/revision-bac/")) {
+        // Grab the current URL
+        let currentURL = window.location.href;
 
-  const popinWrapper = document.querySelector('.popin-wrapper.popin-contenus-gratuits');
-  popinWrapper && popinWrapper.parentNode.removeChild(popinWrapper);
+        // Create the new URL for smry.ai
+        let newURL = "https://www.smry.ai/proxy?url=" + encodeURIComponent(currentURL);
 
- // Enable page scrolling
-  document.documentElement.style.overflow = 'auto';
-  document.body.style.overflow = 'auto';
+        // Open the new URL in a new tab
+        GM_openInTab(newURL, {active: true, insert: true, setParent: true});
+
+        // This part will be executed on the smry.ai page
+        setTimeout(function() {
+            // Attempt to copy the page content
+            try {
+                let content = document.documentElement.innerHTML;
+                GM_setClipboard(content, 'text');
+                console.log("Content copied to clipboard");
+            } catch (e) {
+                console.error("Failed to copy content: ", e);
+            }
+        }, 5000); // Adjust this delay as needed to ensure the page is fully loaded
+    }
 })();
